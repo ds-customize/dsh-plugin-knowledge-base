@@ -1,0 +1,7 @@
+# Bundle patch for dsh-plugin-knowledge-base: mounts the plugin into any
+# profile that installs this package (`dsh plugin --profile <name> add <pkg>`
+# or a manual `dsh.profile.bundles` entry). Hand installs may instead insert
+# the same row into the profile's own cordis.patch.yml.
+- insert:
+    - id: knowledge-base
+      name: 'dsh-plugin-knowledge-base'
