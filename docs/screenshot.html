@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>knowledge-base panel</title>
+<style>
+:root{
+	--dsw-alias-bg-layer-1:#f2f3f5;
+	--dsw-alias-label-primary:#1f2329;
+	--dsw-alias-label-secondary:#646a73;
+	--dsw-alias-label-tertiary:#8f959e;
+	--dsw-alias-label-dimmed:#bbbfc4;
+	--dsw-alias-label-primary-foreground:#ffffff;
+	--dsw-alias-border-l2:#e5e6eb;
+	--dsw-specific-menu:#ffffff;
+	--dsw-alias-interactive-bg-hover:#f5f6f7;
+	--dsw-alias-state-business-primary:#3370ff;
+	--dsw-alias-button-primary-fill:#3370ff;
+	--dsw-alias-state-error-primary:#f54a45;
+	--dsw-shadow-lv3:0 8px 24px rgba(0,0,0,.14);
+	--dsw-font-mono:Consolas,"Courier New",monospace;
+	--dsw-scrollbar-bg-l2:#d5d7db;
+	--dsw-scrollbar-hover-l2:#b8bcc2;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{
+	width:560px;height:780px;
+	background:#f5f6f8;
+	font-family:-apple-system,"Segoe UI","Microsoft YaHei","PingFang SC",sans-serif;
+	display:flex;flex-direction:column;justify-content:flex-end;
+	padding:0 24px 28px;
+}
+.composer{
+	background:#fff;border:1px solid var(--dsw-alias-border-l2);border-radius:14px;
+	padding:10px 12px;box-shadow:0 1px 4px rgba(0,0,0,.05);
+}
+.composer .input{
+	color:var(--dsw-alias-label-dimmed);font-size:13px;line-height:22px;
+	padding:6px 4px 2px;
+}
+.composer .toolbar{display:flex;align-items:center;gap:2px;padding-top:4px}
+
+/* ==== 以下规则逐字取自插件 lib/client.js 的注入样式 ==== */
+.dskb-root{position:relative;display:inline-flex}
+.dskb-trigger{min-height:28px;color:var(--dsw-alias-label-tertiary);cursor:pointer;background:none;border:0;border-radius:6px;align-items:center;gap:5px;padding:3px 6px;font-size:12px;line-height:18px;display:inline-flex;font-family:inherit}
+.dskb-trigger:hover,.dskb-trigger:focus-visible,.dskb-triggerOpen{color:var(--dsw-alias-label-secondary)}
+.dskb-trigger svg{flex:none}
+.dskb-count{background:var(--dsw-alias-bg-layer-1);color:var(--dsw-alias-label-secondary);border-radius:9px;padding:0 6px;font-size:11px;line-height:18px;min-width:18px;text-align:center;font-variant-numeric:tabular-nums}
+.dskb-countOn{background:var(--dsw-alias-button-primary-fill);color:var(--dsw-alias-label-primary-foreground)}
+.dskb-menu{z-index:100;box-sizing:border-box;border:1px solid var(--dsw-alias-border-l2);background:var(--dsw-specific-menu);--dsh-scrollbar-thumb:var(--dsw-scrollbar-bg-l2);--dsh-scrollbar-thumb-hover:var(--dsw-scrollbar-hover-l2);width:420px;max-width:min(460px,100vw - 32px);max-height:min(60vh,520px);box-shadow:var(--dsw-shadow-lv3);border-radius:12px;flex-direction:column;gap:6px;padding:10px;display:flex;position:absolute;bottom:calc(100% + 8px);left:0;overflow-y:auto}
+.dskb-head{align-items:baseline;gap:8px;display:flex;padding:0 2px}
+.dskb-title{font-size:13px;font-weight:600;color:var(--dsw-alias-label-primary)}
+.dskb-sub{font-size:11px;color:var(--dsw-alias-label-tertiary)}
+.dskb-list{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:1px;overflow-y:auto;min-height:0}
+.dskb-row{align-items:center;gap:8px;padding:6px 8px;border-radius:8px;display:flex}
+.dskb-row:hover{background:var(--dsw-alias-interactive-bg-hover)}
+.dskb-check{flex:none;accent-color:var(--dsw-alias-state-business-primary);margin:0;width:14px;height:14px;cursor:pointer}
+.dskb-kindIcon{flex:none;color:var(--dsw-alias-label-tertiary);display:inline-flex}
+.dskb-kindIcon svg{width:14px;height:14px}
+.dskb-path{flex:1;min-width:0;font-family:var(--dsw-font-mono);font-size:12px;line-height:18px;color:var(--dsw-alias-label-primary);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;direction:ltr}
+.dskb-rowOff .dskb-path{color:var(--dsw-alias-label-dimmed)}
+.dskb-kind{flex:none;background:var(--dsw-alias-bg-layer-1);color:var(--dsw-alias-label-secondary);border-radius:5px;padding:0 6px;font-size:11px;line-height:18px}
+.dskb-remove{flex:none;width:22px;height:22px;border:0;background:none;color:var(--dsw-alias-label-dimmed);border-radius:6px;cursor:pointer;font-size:14px;line-height:1;display:inline-flex;align-items:center;justify-content:center;padding:0}
+.dskb-remove:hover{color:var(--dsw-alias-label-primary);background:var(--dsw-alias-interactive-bg-hover)}
+.dskb-empty{color:var(--dsw-alias-label-tertiary);font-size:12px;line-height:18px;padding:12px 8px;text-align:center}
+.dskb-add{border-top:1px solid var(--dsw-alias-border-l2);padding-top:8px;display:flex;flex-direction:column;gap:6px}
+.dskb-addRow{align-items:center;gap:6px;flex-wrap:wrap;display:flex}
+.dskb-connect{border:1px solid var(--dsw-alias-border-l2);background:var(--dsw-alias-bg-layer-1);color:var(--dsw-alias-label-secondary);border-radius:8px;font-size:12px;line-height:18px;padding:5px 10px;cursor:pointer;font-family:inherit;display:inline-flex;align-items:center;gap:5px}
+.dskb-connect:hover:not(:disabled){color:var(--dsw-alias-label-primary)}
+.dskb-foot{color:var(--dsw-alias-label-secondary);font-size:12px;line-height:18px;padding:0 2px;word-break:break-all}
+.dskb-error{color:var(--dsw-alias-state-error-primary);font-size:11px;line-height:16px;padding:0 2px;word-break:break-all}
+.dskb-connect svg{width:14px;height:14px;flex:none}
+</style>
+</head>
+<body>
+	<div class="composer">
+		<div class="input">给 DSH 发送消息…</div>
+		<div class="toolbar">
+			<div class="dskb-root">
+				<div class="dskb-menu" role="dialog" aria-label="本地知识库">
+					<div class="dskb-head">
+						<span class="dskb-title">本地知识库</span>
+						<span class="dskb-sub">已启用 3/3 · 每次提问自动检索</span>
+					</div>
+					<ul class="dskb-list">
+						<li class="dskb-row">
+							<input type="checkbox" class="dskb-check" checked>
+							<span class="dskb-kindIcon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.376 3.622a1 1 0 0 1 3.002 3.002L7.368 18.635a2 2 0 0 1-.855.506l-2.872.838a.5.5 0 0 1-.62-.62l.838-2.872a2 2 0 0 1 .506-.854z"/></svg></span>
+							<span class="dskb-path" title="副本位置：D:\fep\DPE互联互通接口梳理.xlsx-d93e4397\DPE互联互通接口梳理.xlsx">DPE互联互通接口梳理.xlsx</span>
+							<span class="dskb-kind">文件</span>
+							<button type="button" class="dskb-remove" title="断开并删除副本">×</button>
+						</li>
+						<li class="dskb-row">
+							<input type="checkbox" class="dskb-check" checked>
+							<span class="dskb-kindIcon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m6 14 1.5-2.9A2 2 0 0 1 9.24 10H20a2 2 0 0 1 1.94 2.5l-1.54 6a2 2 0 0 1-1.95 1.5H4a2 2 0 0 1-2-2V5c0-1.1.9-2 2-2h3.9a2 2 0 0 1 1.69.9l.81 1.2a2 2 0 0 0 1.67.9H18a2 2 0 0 1 2 2v2"/></svg></span>
+							<span class="dskb-path" title="副本位置：D:\fep\dce new-6a0f4671">dce new</span>
+							<span class="dskb-kind">目录</span>
+							<button type="button" class="dskb-remove" title="断开并删除副本">×</button>
+						</li>
+						<li class="dskb-row">
+							<input type="checkbox" class="dskb-check" checked>
+							<span class="dskb-kindIcon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.376 3.622a1 1 0 0 1 3.002 3.002L7.368 18.635a2 2 0 0 1-.855.506l-2.872.838a.5.5 0 0 1-.62-.62l.838-2.872a2 2 0 0 1 .506-.854z"/></svg></span>
+							<span class="dskb-path" title="副本位置：D:\fep\DSEP前端SDK架构设计.vsdx-cf4761dc\DSEP前端SDK架构设计.vsdx">DSEP前端SDK架构设计.vsdx</span>
+							<span class="dskb-kind">文件</span>
+							<button type="button" class="dskb-remove" title="断开并删除副本">×</button>
+						</li>
+					</ul>
+					<div class="dskb-add">
+						<div class="dskb-addRow">
+							<button type="button" class="dskb-connect"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m21.44 11.05-9.19 9.19a6 6 0 0 1-8.49-8.49l8.57-8.57A4 4 0 1 1 18 8.84l-8.59 8.57a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg>选择文件…</button>
+							<button type="button" class="dskb-connect"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m6 14 1.5-2.9A2 2 0 0 1 9.24 10H20a2 2 0 0 1 1.94 2.5l-1.54 6a2 2 0 0 1-1.95 1.5H4a2 2 0 0 1-2-2V5c0-1.1.9-2 2-2h3.9a2 2 0 0 1 1.69.9l.81 1.2a2 2 0 0 0 1.67.9H18a2 2 0 0 1 2 2v2"/></svg>选择文件夹…</button>
+							<button type="button" class="dskb-connect"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>修改知识库同步地址…</button>
+						</div>
+					</div>
+					<div class="dskb-foot">连接的目录/文件会保存到 D:\fep，之后每次提问自动检索并引用来源。</div>
+				</div>
+				<button type="button" class="dskb-trigger dskb-triggerOpen" aria-expanded="true">
+					<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.376 3.622a1 1 0 0 1 3.002 3.002L7.368 18.635a2 2 0 0 1-.855.506l-2.872.838a.5.5 0 0 1-.62-.62l.838-2.872a2 2 0 0 1 .506-.854z"/></svg>
+					<span>知识库</span>
+					<span class="dskb-count dskb-countOn">3</span>
+				</button>
+			</div>
+		</div>
+	</div>
+</body>
+</html>
